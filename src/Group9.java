@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EmptyStackException;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
@@ -155,18 +157,26 @@ public class Group9 {
 
 	// Takes a long number and returns the product of its up to two 
 	// smallest prime factors
-	private static class PrimesComparator {		
+	private static class PrimesComparator {	
+		static Hashtable <Long,Long>usedNums = new Hashtable<Long,Long>();
 
 		public static long productOfPrimeFactors(long n) {
 			long num = n;
 			long prime1 = 1;
 			long prime2 = 1;
+			long result;
 			long bound = (long) Math.sqrt(num) + 1;
+			
+			if(usedNums.containsKey(n)){
+				return  usedNums.get(n);
+			}
 
 			//Goes through the primes1[] up top and determines if any of the prime numbers in it are primes of the number passed in
 			for(int i = 0; i < primes1.length; i++) {
 				if(primes1[i] > num){
-					return prime1 * prime2;
+					result = prime1*prime2;
+					usedNums.put(n, result);
+					return result;
 				}
 
 				if(num % primes1[i] == 0) {
@@ -176,8 +186,9 @@ public class Group9 {
 
 					} else{
 						prime2 = primes1[i];
-
-						return prime1*prime2;
+						result = prime1*prime2;
+						usedNums.put(n, result);
+						return result;
 					}
 				}
 				
@@ -186,7 +197,10 @@ public class Group9 {
 			//Goes through the primes2[] that is generated, and determines if any of the prime numbers in it are primes of the number passed in
 			for (int i = 0; i < primes2.length; i++) {
 				if(primes2[i] > num){
-					return prime1 * prime2;
+					result = prime1*prime2;
+					usedNums.put(n, result);
+
+					return result;
 				}
 
 				if(num % primes2[i] == 0) {
@@ -197,7 +211,10 @@ public class Group9 {
 					} else{
 						prime2 = primes2[i];
 
-						return prime1*prime2;
+						result = prime1*prime2;
+						usedNums.put(n, result);
+
+						return result;
 					}
 				}
 			}
@@ -210,7 +227,11 @@ public class Group9 {
 					} else { 
 						if (i % prime1 != 0) { 
 							prime2 = i;
-							return prime1 * prime2;
+							
+							result = prime1*prime2;
+							usedNums.put(n, result);
+
+							return result;
 
 						}
 					}
@@ -226,11 +247,14 @@ public class Group9 {
 				}
 				prime2 = candidate;
 			}
-			return prime1 * prime2;
+			result = prime1*prime2;
+			usedNums.put(n, result);
+
+			return result;
 		}
 		
 		public static void testPrimeFactors() {
-			if (productOfPrimeFactors(8) != 2) {
+	/*		if (productOfPrimeFactors(8) != 2) {
 				System.out.println("fails on 8");
 			}
 			if (productOfPrimeFactors(27) != 3) {
@@ -264,7 +288,7 @@ public class Group9 {
 			if (productOfPrimeFactors(1) != 1) { // definition for 1
 				System.out.println("fails on 1");
 				System.out.println(productOfPrimeFactors(1));
-			}
+			}*/
 		}
 	}
 }
